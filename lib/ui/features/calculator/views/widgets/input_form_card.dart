@@ -16,20 +16,33 @@ class _InputFormCardState extends State<InputFormCard> {
   late final TextEditingController _consumptionController;
   late final TextEditingController _priceController;
 
+  void _clearInputs() {
+    _originController.clear();
+    _destinationController.clear();
+    _consumptionController.clear();
+    _priceController.clear();
+  }
+
   @override
   void initState() {
     super.initState();
-    _originController =
-        TextEditingController(text: widget.viewModel.originText);
-    _destinationController =
-        TextEditingController(text: widget.viewModel.destinationText);
-    _consumptionController =
-        TextEditingController(text: widget.viewModel.consumptionText);
+    _originController = TextEditingController(
+      text: widget.viewModel.originText,
+    );
+    _destinationController = TextEditingController(
+      text: widget.viewModel.destinationText,
+    );
+    _consumptionController = TextEditingController(
+      text: widget.viewModel.consumptionText,
+    );
     _priceController = TextEditingController(text: widget.viewModel.priceText);
+    widget.viewModel.addListener(_clearInputs);
   }
 
   @override
   void dispose() {
+    _clearInputs();
+    widget.viewModel.removeListener(_clearInputs);
     _originController.dispose();
     _destinationController.dispose();
     _consumptionController.dispose();
@@ -95,8 +108,9 @@ class _InputFormCardState extends State<InputFormCard> {
                 Expanded(
                   child: TextField(
                     controller: _consumptionController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: const InputDecoration(
                       labelText: 'Consumo (km/L)',
                       hintText: 'Ex: 12.5',
@@ -112,8 +126,9 @@ class _InputFormCardState extends State<InputFormCard> {
                 Expanded(
                   child: TextField(
                     controller: _priceController,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: const InputDecoration(
                       labelText: 'Preço (R\$/L)',
                       hintText: 'Ex: 6.39',
@@ -132,10 +147,10 @@ class _InputFormCardState extends State<InputFormCard> {
             Material(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
-            //   shape: RoundedRectangleBorder(
-            //  //   borderRadius: BorderRadius.circular(12),
-            //     side: const BorderSide(color: Color(0xFFE2E8F0)),
-            //   ),
+              //   shape: RoundedRectangleBorder(
+              //  //   borderRadius: BorderRadius.circular(12),
+              //     side: const BorderSide(color: Color(0xFFE2E8F0)),
+              //   ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: SwitchListTile(
@@ -172,10 +187,7 @@ class _InputFormCardState extends State<InputFormCard> {
                     Expanded(
                       child: Text(
                         widget.viewModel.errorMessage!,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 13,
-                        ),
+                        style: const TextStyle(color: Colors.red, fontSize: 13),
                       ),
                     ),
                   ],
