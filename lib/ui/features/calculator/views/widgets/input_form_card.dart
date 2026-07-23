@@ -25,11 +25,17 @@ class _InputFormCardState extends State<InputFormCard> {
   final FocusNode _consumptionFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
 
-  void _clearInputs() {
-    _originController.clear();
-    _destinationController.clear();
-    _consumptionController.clear();
-    _priceController.clear();
+  void _syncInputsWithViewModel() {
+    _updateController(_originController, widget.viewModel.originText);
+    _updateController(_destinationController, widget.viewModel.destinationText);
+    _updateController(_consumptionController, widget.viewModel.consumptionText);
+    _updateController(_priceController, widget.viewModel.priceText);
+  }
+
+  void _updateController(TextEditingController controller, String value) {
+    if (controller.text != value) {
+      controller.text = value;
+    }
   }
 
   @override
@@ -48,7 +54,7 @@ class _InputFormCardState extends State<InputFormCard> {
     for (final focusNode in _textFieldFocusNodes) {
       focusNode.addListener(_handleTextFieldFocus);
     }
-    widget.viewModel.addListener(_clearInputs);
+    widget.viewModel.addListener(_syncInputsWithViewModel);
   }
 
   List<FocusNode> get _textFieldFocusNodes => [
@@ -66,8 +72,7 @@ class _InputFormCardState extends State<InputFormCard> {
 
   @override
   void dispose() {
-    _clearInputs();
-    widget.viewModel.removeListener(_clearInputs);
+    widget.viewModel.removeListener(_syncInputsWithViewModel);
     _originController.dispose();
     _destinationController.dispose();
     _consumptionController.dispose();
