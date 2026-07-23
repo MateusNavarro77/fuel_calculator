@@ -3,8 +3,13 @@ import '../../view_models/calculator_view_model.dart';
 
 class InputFormCard extends StatefulWidget {
   final CalculatorViewModel viewModel;
+  final VoidCallback? onTextFieldFocus;
 
-  const InputFormCard({super.key, required this.viewModel});
+  const InputFormCard({
+    super.key,
+    required this.viewModel,
+    this.onTextFieldFocus,
+  });
 
   @override
   State<InputFormCard> createState() => _InputFormCardState();
@@ -15,6 +20,10 @@ class _InputFormCardState extends State<InputFormCard> {
   late final TextEditingController _destinationController;
   late final TextEditingController _consumptionController;
   late final TextEditingController _priceController;
+  final FocusNode _originFocusNode = FocusNode();
+  final FocusNode _destinationFocusNode = FocusNode();
+  final FocusNode _consumptionFocusNode = FocusNode();
+  final FocusNode _priceFocusNode = FocusNode();
 
   void _clearInputs() {
     _originController.clear();
@@ -36,7 +45,23 @@ class _InputFormCardState extends State<InputFormCard> {
       text: widget.viewModel.consumptionText,
     );
     _priceController = TextEditingController(text: widget.viewModel.priceText);
+    for (final focusNode in _textFieldFocusNodes) {
+      focusNode.addListener(_handleTextFieldFocus);
+    }
     widget.viewModel.addListener(_clearInputs);
+  }
+
+  List<FocusNode> get _textFieldFocusNodes => [
+    _originFocusNode,
+    _destinationFocusNode,
+    _consumptionFocusNode,
+    _priceFocusNode,
+  ];
+
+  void _handleTextFieldFocus() {
+    if (_textFieldFocusNodes.any((focusNode) => focusNode.hasFocus)) {
+      widget.onTextFieldFocus?.call();
+    }
   }
 
   @override
@@ -47,6 +72,11 @@ class _InputFormCardState extends State<InputFormCard> {
     _destinationController.dispose();
     _consumptionController.dispose();
     _priceController.dispose();
+    for (final focusNode in _textFieldFocusNodes) {
+      focusNode
+        ..removeListener(_handleTextFieldFocus)
+        ..dispose();
+    }
     super.dispose();
   }
 
@@ -79,12 +109,14 @@ class _InputFormCardState extends State<InputFormCard> {
             // Origem (RF01)
             TextField(
               controller: _originController,
+              focusNode: _originFocusNode,
               decoration: const InputDecoration(
                 labelText: 'Endereço de Origem',
                 hintText: 'Ex: Av. Paulista, 1000, São Paulo',
                 prefixIcon: Icon(Icons.my_location, color: Colors.green),
               ),
               onChanged: widget.viewModel.setOriginText,
+              onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 12),
@@ -92,12 +124,14 @@ class _InputFormCardState extends State<InputFormCard> {
             // Destino (RF02)
             TextField(
               controller: _destinationController,
+              focusNode: _destinationFocusNode,
               decoration: const InputDecoration(
                 labelText: 'Endereço de Destino',
                 hintText: 'Ex: Parque do Ibirapuera, São Paulo',
                 prefixIcon: Icon(Icons.location_on, color: Colors.red),
               ),
               onChanged: widget.viewModel.setDestinationText,
+              onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
@@ -108,6 +142,7 @@ class _InputFormCardState extends State<InputFormCard> {
                 Expanded(
                   child: TextField(
                     controller: _consumptionController,
+                    focusNode: _consumptionFocusNode,
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
@@ -117,6 +152,7 @@ class _InputFormCardState extends State<InputFormCard> {
                       prefixIcon: Icon(Icons.speed),
                     ),
                     onChanged: widget.viewModel.setConsumptionText,
+                    onTap: widget.onTextFieldFocus,
                     textInputAction: TextInputAction.next,
                   ),
                 ),
@@ -126,6 +162,7 @@ class _InputFormCardState extends State<InputFormCard> {
                 Expanded(
                   child: TextField(
                     controller: _priceController,
+                    focusNode: _priceFocusNode,
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
@@ -135,6 +172,7 @@ class _InputFormCardState extends State<InputFormCard> {
                       prefixIcon: Icon(Icons.local_gas_station),
                     ),
                     onChanged: widget.viewModel.setPriceText,
+                    onTap: widget.onTextFieldFocus,
                     textInputAction: TextInputAction.done,
                     onSubmitted: (_) => widget.viewModel.calculate(),
                   ),
