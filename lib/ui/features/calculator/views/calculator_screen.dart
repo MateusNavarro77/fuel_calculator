@@ -108,9 +108,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 builder: (context, scrollController) {
                   return Material(
                     color: Theme.of(context).colorScheme.surface,
-                    elevation: 8,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(24),
+                    elevation: 0,
+                    shape: const Border(
+                      top: BorderSide(
+                        color: Color(0xFF5D4038),
+                        width: 1.5,
+                      ),
                     ),
                     child: SafeArea(
                       top: false,
@@ -123,14 +126,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           children: [
                             const SizedBox(height: 12),
                             Container(
-                              width: 40,
+                              width: 48,
                               height: 4,
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.outlineVariant,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
+                              color: const Color(0xFFFF5625),
                             ),
 
                             // Formulário de Entrada (RF01 - RF05)

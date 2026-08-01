@@ -14,14 +14,12 @@ class ResultCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 4,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-      //  borderRadius: BorderRadius.circular(16),
+      shape: const RoundedRectangleBorder(
         side: BorderSide(
-          color: theme.colorScheme.tertiary.withAlpha(100),
-          width: 1.5,
+          color: Color(0xFF5D4038),
+          width: 1.0,
         ),
+        borderRadius: BorderRadius.zero,
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -30,17 +28,17 @@ class ResultCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.monetization_on,
-                  color: theme.colorScheme.tertiary,
-                  size: 28,
+                Container(
+                  width: 8,
+                  height: 8,
+                  color: const Color(0xFFFF4500),
                 ),
                 const SizedBox(width: 8),
                 Text(
                   'Resumo da Estimativa (RF08)',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.tertiary,
+                    color: const Color(0xFFFFB5A0),
                   ),
                 ),
               ],
@@ -49,8 +47,9 @@ class ResultCard extends StatelessWidget {
 
             // Distância de Ida
             _buildRow(
+              context: context,
               icon: Icons.east,
-              iconColor: const Color(0xFF0284C7),
+              iconColor: const Color(0xFFFFB5A0),
               label: 'Distância de Ida:',
               value: AppFormatters.formatDistance(calc.outboundDistanceKm),
             ),
@@ -59,8 +58,9 @@ class ResultCard extends StatelessWidget {
             if (calc.isRoundTrip && calc.returnDistanceKm != null) ...[
               const SizedBox(height: 8),
               _buildRow(
+                context: context,
                 icon: Icons.west,
-                iconColor: const Color(0xFF9333EA),
+                iconColor: const Color(0xFFC9C6C5),
                 label: 'Distância de Volta (RN05):',
                 value: AppFormatters.formatDistance(calc.returnDistanceKm!),
               ),
@@ -69,8 +69,9 @@ class ResultCard extends StatelessWidget {
             const SizedBox(height: 8),
             // Distância Total
             _buildRow(
+              context: context,
               icon: Icons.alt_route,
-              iconColor: Colors.blueGrey,
+              iconColor: const Color(0xFFFF5625),
               label: 'Distância Total:',
               value: AppFormatters.formatDistance(calc.totalDistanceKm),
               isBold: true,
@@ -79,8 +80,9 @@ class ResultCard extends StatelessWidget {
             const SizedBox(height: 8),
             // Litros Estimados
             _buildRow(
+              context: context,
               icon: Icons.local_gas_station_outlined,
-              iconColor: Colors.amber.shade800,
+              iconColor: const Color(0xFFC9C6C5),
               label: 'Combustível Estimado:',
               value: AppFormatters.formatLitres(calc.litresNeeded),
             ),
@@ -90,9 +92,11 @@ class ResultCard extends StatelessWidget {
             // Custo Total Estimado
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.tertiary.withAlpha(25),
-                borderRadius: BorderRadius.circular(12),
+              decoration: const BoxDecoration(
+                color: Color(0xFF1C1B1B),
+                border: Border.fromBorderSide(
+                  BorderSide(color: Color(0xFFFF5625), width: 1.5),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,14 +105,14 @@ class ResultCard extends StatelessWidget {
                     'Custo Estimado:',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.tertiary,
+                      color: const Color(0xFFFFB5A0),
                     ),
                   ),
                   Text(
                     AppFormatters.formatCurrency(calc.estimatedCost),
-                    style: theme.textTheme.headlineSmall?.copyWith(
+                    style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.tertiary,
+                      color: const Color(0xFFFF4500),
                     ),
                   ),
                 ],
@@ -121,31 +125,32 @@ class ResultCard extends StatelessWidget {
   }
 
   Widget _buildRow({
+    required BuildContext context,
     required IconData icon,
     required Color iconColor,
     required String label,
     required String value,
     bool isBold = false,
   }) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Icon(icon, size: 20, color: iconColor),
         const SizedBox(width: 8),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
+          style: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            color: Colors.grey.shade800,
+            color: const Color(0xFFE5E2E1),
           ),
         ),
         const Spacer(),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 14,
+          style: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: isBold ? Colors.black : Colors.grey.shade900,
+            color: isBold ? const Color(0xFFFF4500) : const Color(0xFFE5E2E1),
           ),
         ),
       ],
