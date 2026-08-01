@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:fuel_calculator/ui/core/theme.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../../../domain/repositories/fuel_calculator_repository.dart';
 
@@ -22,7 +23,7 @@ class MapViewWidget extends StatefulWidget {
 class _MapViewWidgetState extends State<MapViewWidget>
     with TickerProviderStateMixin {
   static const _routeAnimationDuration = Duration(milliseconds: 600);
-  static const _routePadding = 24.0;
+  static const _routePadding = AppSpacing.gutter;
   static const _maximumRouteZoom = 16.0;
 
   final MapController _mapController = MapController();
@@ -126,7 +127,7 @@ class _MapViewWidgetState extends State<MapViewWidget>
           Polyline(
             points: outboundPoints,
             strokeWidth: 5.0,
-            color: const Color(0xFFFF4500),
+            color: AppColors.heatOrange,
           ),
         );
 
@@ -134,14 +135,18 @@ class _MapViewWidgetState extends State<MapViewWidget>
         markers.add(
           Marker(
             point: widget.tripResult!.originPoint.toLatLng(),
-            width: 40,
-            height: 40,
+            width: AppSpacing.margin,
+            height: AppSpacing.margin,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1C1B1B),
-                border: Border.all(color: const Color(0xFFFFB5A0), width: 2),
+                color: AppColors.surfaceContainerLow,
+                border: Border.all(color: AppColors.primary, width: 2),
               ),
-              child: const Icon(Icons.my_location, color: Color(0xFFFFB5A0), size: 24),
+              child: const Icon(
+                Icons.my_location,
+                color: AppColors.primary,
+                size: 24,
+              ),
             ),
           ),
         );
@@ -150,14 +155,18 @@ class _MapViewWidgetState extends State<MapViewWidget>
         markers.add(
           Marker(
             point: widget.tripResult!.destinationPoint.toLatLng(),
-            width: 40,
-            height: 40,
+            width: AppSpacing.margin,
+            height: AppSpacing.margin,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1C1B1B),
-                border: Border.all(color: const Color(0xFFFF5625), width: 2),
+                color: AppColors.surfaceContainerLow,
+                border: Border.all(color: AppColors.primaryContainer, width: 2),
               ),
-              child: const Icon(Icons.location_on, color: Color(0xFFFF5625), size: 24),
+              child: const Icon(
+                Icons.location_on,
+                color: AppColors.primaryContainer,
+                size: 24,
+              ),
             ),
           ),
         );
@@ -169,7 +178,7 @@ class _MapViewWidgetState extends State<MapViewWidget>
           Polyline(
             points: returnPoints,
             strokeWidth: 4.0,
-            color: const Color(0xFFC6C6C7),
+            color: AppColors.secondary,
           ),
         );
       }

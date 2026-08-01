@@ -27,8 +27,8 @@ class FuelCalculatorRepository {
   FuelCalculatorRepository({
     GeocodingService? geocodingService,
     RoutingService? routingService,
-  })  : _geocodingService = geocodingService ?? GeocodingService(),
-        _routingService = routingService ?? RoutingService();
+  }) : _geocodingService = geocodingService ?? GeocodingService(),
+       _routingService = routingService ?? RoutingService();
 
   Future<TripCalculationResult> calculateTrip({
     required String originAddress,
@@ -39,8 +39,9 @@ class FuelCalculatorRepository {
   }) async {
     // 1. Geocode origin and destination
     final originPoint = await _geocodingService.searchAddress(originAddress);
-    final destinationPoint =
-        await _geocodingService.searchAddress(destinationAddress);
+    final destinationPoint = await _geocodingService.searchAddress(
+      destinationAddress,
+    );
 
     // 2. Fetch outbound route
     final outboundRoute = await _routingService.getRoute(

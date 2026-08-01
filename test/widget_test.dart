@@ -15,4 +15,38 @@ void main() {
     expect(find.text('Endereço de Origem'), findsOneWidget);
     expect(find.text('Endereço de Destino'), findsOneWidget);
   });
+
+  testWidgets(
+    'Drag handle is inside pinned SliverPersistentHeader and responds to gestures',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(const FuelCalculatorApp(enableTileLayer: false));
+
+      final dragHandleFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.constraints?.hasBoundedWidth == true &&
+            widget.constraints?.maxWidth == 48,
+      );
+
+      expect(dragHandleFinder, findsOneWidget);
+
+      // Verify drag handle is inside a pinned SliverPersistentHeader inside CustomScrollView
+      final customScrollViewFinder = find.byType(CustomScrollView);
+      expect(customScrollViewFinder, findsOneWidget);
+
+      final sliverHeaderFinder = find.byType(SliverPersistentHeader);
+      expect(sliverHeaderFinder, findsOneWidget);
+
+      expect(
+        find.descendant(of: sliverHeaderFinder, matching: dragHandleFinder),
+        findsOneWidget,
+      );
+
+      // Drag up on the drag handle to expand the sheet
+      await tester.drag(dragHandleFinder, const Offset(0, -200));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DraggableScrollableSheet), findsOneWidget);
+    },
+  );
 }
