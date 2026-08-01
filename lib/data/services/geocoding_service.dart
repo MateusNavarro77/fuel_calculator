@@ -46,4 +46,44 @@ class GeocodingService {
       longitude: double.parse(lonStr),
     );
   }
+
+  Future<List<LocationPoint>> fetchAddressSuggestions(
+    String query, {
+    int limit = 5,
+  }) async {
+    final trimmedQuery = query.trim();
+    if (trimmedQuery.length < 3) {
+      return const [];
+    }
+
+    final uri = Uri.parse(
+      'https://nominatim.openstreetmap.org/search?q=${Uri.encodeComponent(trimmedQuery)}&format=json&limit=$limit',
+    );
+
+    try {
+      final response = await _httpClient.get(
+        uri,
+        headers: {
+          'User-Agent': 'FuelCalculatorApp/1.0 (flutter_app)',
+          'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
+        },
+      );
+
+      if (response.statusCode != 200) {
+        return const [];
+      }
+
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((item) {
+        final map = item as Map<String, dynamic>;
+        return LocationPoint(
+          addressName: map['display_name'] as String,
+          latitude: double.parse(map['lat'] as String),
+          longitude: double.parse(map['lon'] as String),
+        );
+      }).toList();
+    } catch (_) {
+      return const [];
+    }
+  }
 }

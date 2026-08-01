@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_calculator/data/services/geocoding_service.dart';
 import '../../view_models/calculator_view_model.dart';
+import 'address_autocomplete_field.dart';
 
 class InputFormCard extends StatefulWidget {
   final CalculatorViewModel viewModel;
   final VoidCallback? onTextFieldFocus;
+  final GeocodingService _geocodingService;
 
-  const InputFormCard({
+  InputFormCard({
     super.key,
     required this.viewModel,
     this.onTextFieldFocus,
-  });
+    GeocodingService? geocodingService,
+  }) : _geocodingService = geocodingService ?? GeocodingService();
 
   @override
   State<InputFormCard> createState() => _InputFormCardState();
@@ -115,14 +119,14 @@ class _InputFormCardState extends State<InputFormCard> {
             const SizedBox(height: 16),
 
             // Origem (RF01)
-            TextField(
+            AddressAutocompleteField(
               controller: _originController,
               focusNode: _originFocusNode,
-              decoration: const InputDecoration(
-                labelText: 'Endereço de Origem',
-                hintText: 'Ex: Av. Paulista, 1000, São Paulo',
-                prefixIcon: Icon(Icons.my_location, color: Color(0xFFFFB5A0)),
-              ),
+              labelText: 'Endereço de Origem',
+              hintText: 'Ex: Av. Paulista, 1000, São Paulo',
+              prefixIcon: Icons.my_location,
+              prefixIconColor: const Color(0xFFFFB5A0),
+              fetchSuggestions: widget._geocodingService.fetchAddressSuggestions,
               onChanged: widget.viewModel.setOriginText,
               onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
@@ -130,14 +134,14 @@ class _InputFormCardState extends State<InputFormCard> {
             const SizedBox(height: 12),
 
             // Destino (RF02)
-            TextField(
+            AddressAutocompleteField(
               controller: _destinationController,
               focusNode: _destinationFocusNode,
-              decoration: const InputDecoration(
-                labelText: 'Endereço de Destino',
-                hintText: 'Ex: Parque do Ibirapuera, São Paulo',
-                prefixIcon: Icon(Icons.location_on, color: Color(0xFFFF5625)),
-              ),
+              labelText: 'Endereço de Destino',
+              hintText: 'Ex: Parque do Ibirapuera, São Paulo',
+              prefixIcon: Icons.location_on,
+              prefixIconColor: const Color(0xFFFF5625),
+              fetchSuggestions: widget._geocodingService.fetchAddressSuggestions,
               onChanged: widget.viewModel.setDestinationText,
               onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
