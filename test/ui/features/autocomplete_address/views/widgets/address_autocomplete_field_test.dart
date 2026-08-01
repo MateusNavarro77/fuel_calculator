@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fuel_calculator/domain/models/location_point.dart';
-import 'package:fuel_calculator/ui/features/calculator/views/widgets/address_autocomplete_field.dart';
+import 'package:fuel_calculator/ui/features/autocomplete_address/views/widgets/address_autocomplete_field.dart';
 
 void main() {
   group('AddressAutocompleteField Widget Tests', () {

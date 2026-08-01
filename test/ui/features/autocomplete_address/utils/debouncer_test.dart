@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fuel_calculator/ui/core/utils/debouncer.dart';
+import 'package:fuel_calculator/ui/features/autocomplete_address/utils/debouncer.dart';
 
 void main() {
   group('Debouncer', () {

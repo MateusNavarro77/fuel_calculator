@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fuel_calculator/data/services/geocoding_service.dart';
 import 'package:fuel_calculator/ui/core/theme.dart';
 import '../../view_models/calculator_view_model.dart';
-import 'address_autocomplete_field.dart';
+import 'package:fuel_calculator/ui/features/autocomplete_address/views/widgets/address_autocomplete_field.dart';
 
 class InputFormCard extends StatefulWidget {
   final CalculatorViewModel viewModel;
