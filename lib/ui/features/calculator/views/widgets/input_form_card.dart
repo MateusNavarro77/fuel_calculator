@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_calculator/data/services/geocoding_service.dart';
+import 'package:fuel_calculator/ui/core/theme.dart';
 import '../../view_models/calculator_view_model.dart';
 import 'address_autocomplete_field.dart';
 
@@ -94,20 +95,20 @@ class _InputFormCardState extends State<InputFormCard> {
     final theme = Theme.of(context);
 
     return Card(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(AppSpacing.stackMd),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.stackMd + AppSpacing.unit),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
                 Container(
-                  width: 8,
-                  height: 8,
-                  color: const Color(0xFFFF4500),
+                  width: AppSpacing.stackSm,
+                  height: AppSpacing.stackSm,
+                  color: AppColors.heatOrange,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppSpacing.stackSm),
                 Text(
                   'Dados da Viagem',
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -116,7 +117,7 @@ class _InputFormCardState extends State<InputFormCard> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.stackMd),
 
             // Origem (RF01)
             AddressAutocompleteField(
@@ -125,13 +126,14 @@ class _InputFormCardState extends State<InputFormCard> {
               labelText: 'Endereço de Origem',
               hintText: 'Ex: Av. Paulista, 1000, São Paulo',
               prefixIcon: Icons.my_location,
-              prefixIconColor: const Color(0xFFFFB5A0),
-              fetchSuggestions: widget._geocodingService.fetchAddressSuggestions,
+              prefixIconColor: theme.colorScheme.primary,
+              fetchSuggestions:
+                  widget._geocodingService.fetchAddressSuggestions,
               onChanged: widget.viewModel.setOriginText,
               onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.stackSm + AppSpacing.unit),
 
             // Destino (RF02)
             AddressAutocompleteField(
@@ -140,13 +142,14 @@ class _InputFormCardState extends State<InputFormCard> {
               labelText: 'Endereço de Destino',
               hintText: 'Ex: Parque do Ibirapuera, São Paulo',
               prefixIcon: Icons.location_on,
-              prefixIconColor: const Color(0xFFFF5625),
-              fetchSuggestions: widget._geocodingService.fetchAddressSuggestions,
+              prefixIconColor: theme.colorScheme.primaryContainer,
+              fetchSuggestions:
+                  widget._geocodingService.fetchAddressSuggestions,
               onChanged: widget.viewModel.setDestinationText,
               onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.stackMd),
 
             Row(
               children: [
@@ -158,17 +161,20 @@ class _InputFormCardState extends State<InputFormCard> {
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Consumo (km/L)',
                       hintText: 'Ex: 12.5',
-                      prefixIcon: Icon(Icons.speed, color: Color(0xFFC6C6C7)),
+                      prefixIcon: Icon(
+                        Icons.speed,
+                        color: theme.colorScheme.secondary,
+                      ),
                     ),
                     onChanged: widget.viewModel.setConsumptionText,
                     onTap: widget.onTextFieldFocus,
                     textInputAction: TextInputAction.next,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacing.stackSm + AppSpacing.unit),
 
                 // Preço (RF04)
                 Expanded(
@@ -178,10 +184,13 @@ class _InputFormCardState extends State<InputFormCard> {
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Preço (R\$/L)',
                       hintText: 'Ex: 6.39',
-                      prefixIcon: Icon(Icons.local_gas_station, color: Color(0xFFC6C6C7)),
+                      prefixIcon: Icon(
+                        Icons.local_gas_station,
+                        color: theme.colorScheme.secondary,
+                      ),
                     ),
                     onChanged: widget.viewModel.setPriceText,
                     onTap: widget.onTextFieldFocus,
@@ -191,17 +200,19 @@ class _InputFormCardState extends State<InputFormCard> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.stackSm + AppSpacing.unit),
 
             // Switch Ida e Volta (RF05)
             Material(
               color: theme.colorScheme.surfaceContainerLow,
-              shape: const RoundedRectangleBorder(
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
-                side: BorderSide(color: Color(0xFF5D4038)),
+                side: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.stackSm + AppSpacing.unit,
+                ),
                 child: SwitchListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
@@ -219,34 +230,39 @@ class _InputFormCardState extends State<InputFormCard> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.stackMd),
 
             // Mensagem de Erro
             if (widget.viewModel.errorMessage != null) ...[
               Container(
-                padding: const EdgeInsets.all(12),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF93000A),
+                padding: const EdgeInsets.all(
+                  AppSpacing.stackSm + AppSpacing.unit,
+                ),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.errorContainer,
                   border: Border.fromBorderSide(
-                    BorderSide(color: Color(0xFFFFB4AB)),
+                    BorderSide(color: theme.colorScheme.error),
                   ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.error_outline, color: Color(0xFFFFDAD6)),
-                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.error_outline,
+                      color: theme.colorScheme.onErrorContainer,
+                    ),
+                    const SizedBox(width: AppSpacing.stackSm),
                     Expanded(
                       child: Text(
                         widget.viewModel.errorMessage!,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: const Color(0xFFFFDAD6),
+                          color: theme.colorScheme.onErrorContainer,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.stackMd),
             ],
 
             // Botão Calcular
@@ -255,20 +271,23 @@ class _InputFormCardState extends State<InputFormCard> {
                   ? null
                   : () => widget.viewModel.calculate(),
               child: widget.viewModel.isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
+                  ? SizedBox(
+                      height: AppSpacing.stackMd + AppSpacing.unit,
+                      width: AppSpacing.stackMd + AppSpacing.unit,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.black,
+                        color: theme.colorScheme.onPrimary,
                       ),
                     )
-                  : const Row(
+                  : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.calculate, color: Colors.black),
-                        SizedBox(width: 8),
-                        Text('CALCULAR CUSTO DA VIAGEM'),
+                        Icon(
+                          Icons.calculate,
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                        const SizedBox(width: AppSpacing.stackSm),
+                        const Text('CALCULAR CUSTO DA VIAGEM'),
                       ],
                     ),
             ),

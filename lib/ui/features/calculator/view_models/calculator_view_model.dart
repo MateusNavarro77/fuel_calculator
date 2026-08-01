@@ -5,7 +5,7 @@ class CalculatorViewModel extends ChangeNotifier {
   final FuelCalculatorRepository _repository;
 
   CalculatorViewModel({FuelCalculatorRepository? repository})
-      : _repository = repository ?? FuelCalculatorRepository();
+    : _repository = repository ?? FuelCalculatorRepository();
 
   String _originText = '';
   String _destinationText = '';
@@ -61,7 +61,10 @@ class CalculatorViewModel extends ChangeNotifier {
   }
 
   double? _parseBrazilianDouble(String input) {
-    final cleanInput = input.replaceAll('R\$', '').replaceAll('km/L', '').trim();
+    final cleanInput = input
+        .replaceAll('R\$', '')
+        .replaceAll('km/L', '')
+        .trim();
     if (cleanInput.isEmpty) return null;
     final normalized = cleanInput.replaceAll('.', '').replaceAll(',', '.');
     return double.tryParse(normalized);

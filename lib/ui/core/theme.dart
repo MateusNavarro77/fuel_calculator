@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppTheme {
-  // Apex Engineering Design System Colors
+abstract class AppSpacing {
+  static const double unit = 4.0;
+  static const double stackSm = 8.0;
+  static const double stackMd = 16.0;
+  static const double gutter = 24.0;
+  static const double margin = 40.0;
+  static const double stackLg = 48.0;
+}
+
+abstract class AppColors {
   static const Color surface = Color(0xFF131313);
   static const Color surfaceDim = Color(0xFF131313);
   static const Color surfaceBright = Color(0xFF393939);
@@ -34,6 +42,42 @@ class AppTheme {
   static const Color onErrorContainer = Color(0xFFFFDAD6);
 
   static const Color background = Color(0xFF0D0D0D); // Deep technical black
+}
+
+class AppTheme {
+  // Apex Engineering Design System Colors
+  static const Color surface = AppColors.surface;
+  static const Color surfaceDim = AppColors.surfaceDim;
+  static const Color surfaceBright = AppColors.surfaceBright;
+  static const Color surfaceContainerLowest = AppColors.surfaceContainerLowest;
+  static const Color surfaceContainerLow = AppColors.surfaceContainerLow;
+  static const Color surfaceContainer = AppColors.surfaceContainer;
+  static const Color surfaceContainerHigh = AppColors.surfaceContainerHigh;
+  static const Color surfaceContainerHighest =
+      AppColors.surfaceContainerHighest;
+
+  static const Color onSurface = AppColors.onSurface;
+  static const Color onSurfaceVariant = AppColors.onSurfaceVariant;
+
+  static const Color outline = AppColors.outline;
+  static const Color outlineVariant = AppColors.outlineVariant;
+
+  static const Color primary = AppColors.primary;
+  static const Color heatOrange = AppColors.heatOrange;
+  static const Color primaryContainer = AppColors.primaryContainer;
+  static const Color onPrimary = AppColors.onPrimary;
+
+  static const Color secondary = AppColors.secondary;
+  static const Color onSecondary = AppColors.onSecondary;
+  static const Color secondaryContainer = AppColors.secondaryContainer;
+  static const Color onSecondaryContainer = AppColors.onSecondaryContainer;
+
+  static const Color tertiary = AppColors.tertiary;
+  static const Color error = AppColors.error;
+  static const Color errorContainer = AppColors.errorContainer;
+  static const Color onErrorContainer = AppColors.onErrorContainer;
+
+  static const Color background = AppColors.background;
 
   static ThemeData get darkTheme {
     return ThemeData(
@@ -115,9 +159,9 @@ class AppTheme {
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
-        shape: const Border(
-          bottom: BorderSide(color: outlineVariant, width: 1),
-        ),
+        //shape: const Border(
+        //  bottom: BorderSide(color: outlineVariant, width: 1),
+        //),
         titleTextStyle: GoogleFonts.jetBrainsMono(
           fontSize: 16,
           fontWeight: FontWeight.w700,
@@ -142,10 +186,7 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           letterSpacing: 1.5,
         ),
-        hintStyle: GoogleFonts.jetBrainsMono(
-          color: outline,
-          fontSize: 13,
-        ),
+        hintStyle: GoogleFonts.jetBrainsMono(color: outline, fontSize: 13),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.zero,
           borderSide: BorderSide(color: outlineVariant, width: 1),
@@ -173,9 +214,7 @@ class AppTheme {
           foregroundColor: Colors.black,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           textStyle: GoogleFonts.jetBrainsMono(
             fontSize: 14,
             fontWeight: FontWeight.w700,

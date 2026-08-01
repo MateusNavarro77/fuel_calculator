@@ -41,14 +41,22 @@ void main() {
       });
 
       final service = GeocodingService(httpClient: client);
-      final suggestions = await service.fetchAddressSuggestions('Avenida Paulista');
+      final suggestions = await service.fetchAddressSuggestions(
+        'Avenida Paulista',
+      );
 
       expect(suggestions.length, equals(2));
-      expect(suggestions[0].addressName, equals('Avenida Paulista, Bela Vista, São Paulo, SP'));
+      expect(
+        suggestions[0].addressName,
+        equals('Avenida Paulista, Bela Vista, São Paulo, SP'),
+      );
       expect(suggestions[0].latitude, equals(-23.5613));
       expect(suggestions[0].longitude, equals(-46.6565));
 
-      expect(suggestions[1].addressName, equals('Avenida Paulista, Rio Claro, SP'));
+      expect(
+        suggestions[1].addressName,
+        equals('Avenida Paulista, Rio Claro, SP'),
+      );
     });
 
     test('returns empty list on HTTP error or exception', () async {
@@ -57,7 +65,9 @@ void main() {
       });
       final service = GeocodingService(httpClient: client);
 
-      final suggestions = await service.fetchAddressSuggestions('Avenida Paulista');
+      final suggestions = await service.fetchAddressSuggestions(
+        'Avenida Paulista',
+      );
       expect(suggestions, isEmpty);
     });
   });

@@ -18,96 +18,102 @@ void main() {
       focusNode.dispose();
     });
 
-    testWidgets('fetches and displays suggestions after debounce duration when typing', (tester) async {
-      String changedText = '';
-      var fetchCount = 0;
+    testWidgets(
+      'fetches and displays suggestions after debounce duration when typing',
+      (tester) async {
+        String changedText = '';
+        var fetchCount = 0;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: AddressAutocompleteField(
-              labelText: 'Endereço de Origem',
-              hintText: 'Digite aqui',
-              prefixIcon: Icons.my_location,
-              prefixIconColor: Colors.orange,
-              controller: controller,
-              focusNode: focusNode,
-              debounceDuration: const Duration(milliseconds: 200),
-              fetchSuggestions: (query) async {
-                fetchCount++;
-                return const [
-                  LocationPoint(
-                    addressName: 'Avenida Paulista, São Paulo',
-                    latitude: -23.5613,
-                    longitude: -46.6565,
-                  ),
-                  LocationPoint(
-                    addressName: 'Avenida Paulista, Rio Claro',
-                    latitude: -22.4000,
-                    longitude: -47.5600,
-                  ),
-                ];
-              },
-              onChanged: (val) {
-                changedText = val;
-              },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: AddressAutocompleteField(
+                labelText: 'Endereço de Origem',
+                hintText: 'Digite aqui',
+                prefixIcon: Icons.my_location,
+                prefixIconColor: Colors.orange,
+                controller: controller,
+                focusNode: focusNode,
+                debounceDuration: const Duration(milliseconds: 200),
+                fetchSuggestions: (query) async {
+                  fetchCount++;
+                  return const [
+                    LocationPoint(
+                      addressName: 'Avenida Paulista, São Paulo',
+                      latitude: -23.5613,
+                      longitude: -46.6565,
+                    ),
+                    LocationPoint(
+                      addressName: 'Avenida Paulista, Rio Claro',
+                      latitude: -22.4000,
+                      longitude: -47.5600,
+                    ),
+                  ];
+                },
+                onChanged: (val) {
+                  changedText = val;
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      // Enter text
-      await tester.enterText(find.byType(TextField), 'Avenida Paulista');
-      expect(changedText, equals('Avenida Paulista'));
+        // Enter text
+        await tester.enterText(find.byType(TextField), 'Avenida Paulista');
+        expect(changedText, equals('Avenida Paulista'));
 
-      // Right after typing, fetch should not be called yet due to debounce
-      expect(fetchCount, equals(0));
+        // Right after typing, fetch should not be called yet due to debounce
+        expect(fetchCount, equals(0));
 
-      // Advance clock past debounce duration
-      await tester.pump(const Duration(milliseconds: 250));
-      await tester.pumpAndSettle();
+        // Advance clock past debounce duration
+        await tester.pump(const Duration(milliseconds: 250));
+        await tester.pumpAndSettle();
 
-      expect(fetchCount, equals(1));
-      expect(find.text('Avenida Paulista, São Paulo'), findsOneWidget);
-      expect(find.text('Avenida Paulista, Rio Claro'), findsOneWidget);
+        expect(fetchCount, equals(1));
+        expect(find.text('Avenida Paulista, São Paulo'), findsOneWidget);
+        expect(find.text('Avenida Paulista, Rio Claro'), findsOneWidget);
 
-      // Select first option
-      await tester.tap(find.text('Avenida Paulista, São Paulo'));
-      await tester.pumpAndSettle();
+        // Select first option
+        await tester.tap(find.text('Avenida Paulista, São Paulo'));
+        await tester.pumpAndSettle();
 
-      expect(controller.text, equals('Avenida Paulista, São Paulo'));
-      expect(changedText, equals('Avenida Paulista, São Paulo'));
-    });
+        expect(controller.text, equals('Avenida Paulista, São Paulo'));
+        expect(changedText, equals('Avenida Paulista, São Paulo'));
+      },
+    );
 
-    testWidgets('does not fetch suggestions if text length is less than 3 characters', (tester) async {
-      var fetchCount = 0;
+    testWidgets(
+      'does not fetch suggestions if text length is less than 3 characters',
+      (tester) async {
+        var fetchCount = 0;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: AddressAutocompleteField(
-              labelText: 'Endereço de Origem',
-              hintText: 'Digite aqui',
-              prefixIcon: Icons.my_location,
-              prefixIconColor: Colors.orange,
-              controller: controller,
-              focusNode: focusNode,
-              debounceDuration: const Duration(milliseconds: 200),
-              fetchSuggestions: (query) async {
-                fetchCount++;
-                return const [];
-              },
-              onChanged: (_) {},
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: AddressAutocompleteField(
+                labelText: 'Endereço de Origem',
+                hintText: 'Digite aqui',
+                prefixIcon: Icons.my_location,
+                prefixIconColor: Colors.orange,
+                controller: controller,
+                focusNode: focusNode,
+                debounceDuration: const Duration(milliseconds: 200),
+                fetchSuggestions: (query) async {
+                  fetchCount++;
+                  return const [];
+                },
+                onChanged: (_) {},
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.enterText(find.byType(TextField), 'Av');
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), 'Av');
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.pumpAndSettle();
 
-      expect(fetchCount, equals(0));
-    });
+        expect(fetchCount, equals(0));
+      },
+    );
   });
 }

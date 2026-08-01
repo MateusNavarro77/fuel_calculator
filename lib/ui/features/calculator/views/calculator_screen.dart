@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_calculator/ui/core/theme.dart';
 import '../../../../domain/repositories/fuel_calculator_repository.dart';
 import '../view_models/calculator_view_model.dart';
 import 'widgets/input_form_card.dart';
@@ -77,9 +78,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            foregroundColor: Theme.of(context).colorScheme.primary,
-            surfaceTintColor: Colors.transparent,
-            scrolledUnderElevation: 0,
+            //foregroundColor: Theme.of(context).colorScheme.primary,
+            //surfaceTintColor: Colors.transparent,
+            //scrolledUnderElevation: 0,
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),
@@ -109,39 +110,46 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   return Material(
                     color: Theme.of(context).colorScheme.surface,
                     elevation: 0,
-                    shape: const Border(
+                    shape: Border(
                       top: BorderSide(
-                        color: Color(0xFF5D4038),
+                        color: Theme.of(context).colorScheme.outlineVariant,
                         width: 1.5,
                       ),
                     ),
                     child: SafeArea(
                       top: false,
-                      child: SingleChildScrollView(
+                      child: CustomScrollView(
                         controller: scrollController,
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.viewInsetsOf(context).bottom + 16,
-                        ),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 12),
-                            Container(
-                              width: 48,
-                              height: 4,
-                              color: const Color(0xFFFF5625),
+                        slivers: [
+                          SliverPersistentHeader(
+                            pinned: true,
+                            delegate: _DragHandleHeaderDelegate(
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.surface,
                             ),
-
-                            // Formulário de Entrada (RF01 - RF05)
-                            InputFormCard(
-                              viewModel: _viewModel,
-                              onTextFieldFocus: _expandSheetForTextInput,
+                          ),
+                          SliverPadding(
+                            padding: EdgeInsets.only(
+                              bottom:
+                                  MediaQuery.viewInsetsOf(context).bottom +
+                                  AppSpacing.stackMd,
                             ),
+                            sliver: SliverList(
+                              delegate: SliverChildListDelegate([
+                                // Formulário de Entrada (RF01 - RF05)
+                                InputFormCard(
+                                  viewModel: _viewModel,
+                                  onTextFieldFocus: _expandSheetForTextInput,
+                                ),
 
-                            // Card de Resultados (RF07, RF08)
-                            if (_viewModel.tripResult != null)
-                              ResultCard(result: _viewModel.tripResult!),
-                          ],
-                        ),
+                                // Card de Resultados (RF07, RF08)
+                                if (_viewModel.tripResult != null)
+                                  ResultCard(result: _viewModel.tripResult!),
+                              ]),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -152,5 +160,42 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         );
       },
     );
+  }
+}
+
+class _DragHandleHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Color backgroundColor;
+
+  const _DragHandleHeaderDelegate({required this.backgroundColor});
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: backgroundColor,
+      alignment: Alignment.center,
+      child: Container(
+        width: AppSpacing.stackLg,
+        height: AppSpacing.unit,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 28.0;
+
+  @override
+  double get minExtent => 28.0;
+
+  @override
+  bool shouldRebuild(covariant _DragHandleHeaderDelegate oldDelegate) {
+    return oldDelegate.backgroundColor != backgroundColor;
   }
 }

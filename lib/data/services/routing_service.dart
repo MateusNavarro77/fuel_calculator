@@ -8,7 +8,7 @@ class RoutingService {
   final http.Client _httpClient;
 
   RoutingService({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client();
+    : _httpClient = httpClient ?? http.Client();
 
   Future<RouteSegment> getRoute({
     required LocationPoint origin,
@@ -22,9 +22,7 @@ class RoutingService {
 
     final response = await _httpClient.get(
       Uri.parse(url),
-      headers: {
-        'User-Agent': 'FuelCalculatorApp/1.0 (flutter_app)',
-      },
+      headers: {'User-Agent': 'FuelCalculatorApp/1.0 (flutter_app)'},
     );
 
     if (response.statusCode != 200) {

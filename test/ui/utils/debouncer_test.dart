@@ -21,24 +21,29 @@ void main() {
       debouncer.dispose();
     });
 
-    test('resets timer when triggered multiple times in rapid succession', () async {
-      final debouncer = Debouncer(duration: const Duration(milliseconds: 100));
-      var count = 0;
+    test(
+      'resets timer when triggered multiple times in rapid succession',
+      () async {
+        final debouncer = Debouncer(
+          duration: const Duration(milliseconds: 100),
+        );
+        var count = 0;
 
-      debouncer.run(() => count++);
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      expect(count, equals(0));
+        debouncer.run(() => count++);
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        expect(count, equals(0));
 
-      debouncer.run(() => count++);
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-      expect(count, equals(0));
+        debouncer.run(() => count++);
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        expect(count, equals(0));
 
-      debouncer.run(() => count++);
-      await Future<void>.delayed(const Duration(milliseconds: 120));
+        debouncer.run(() => count++);
+        await Future<void>.delayed(const Duration(milliseconds: 120));
 
-      expect(count, equals(1));
-      debouncer.dispose();
-    });
+        expect(count, equals(1));
+        debouncer.dispose();
+      },
+    );
 
     test('cancels pending execution', () async {
       final debouncer = Debouncer(duration: const Duration(milliseconds: 100));

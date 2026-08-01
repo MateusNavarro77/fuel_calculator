@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_calculator/ui/core/theme.dart';
 import '../../../../../domain/repositories/fuel_calculator_repository.dart';
 import '../../../../core/utils/formatters.dart';
 
@@ -13,89 +14,92 @@ class ResultCard extends StatelessWidget {
     final calc = result.calculation;
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(
-          color: Color(0xFF5D4038),
-          width: 1.0,
-        ),
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.stackMd,
+        vertical: AppSpacing.stackSm,
+      ),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: theme.colorScheme.outlineVariant, width: 1.0),
         borderRadius: BorderRadius.zero,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.stackMd + AppSpacing.unit),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
                 Container(
-                  width: 8,
-                  height: 8,
-                  color: const Color(0xFFFF4500),
+                  width: AppSpacing.stackSm,
+                  height: AppSpacing.stackSm,
+                  color: AppColors.heatOrange,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppSpacing.stackSm),
                 Text(
                   'Resumo da Estimativa (RF08)',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFFFFB5A0),
+                    color: theme.colorScheme.primary,
                   ),
                 ),
               ],
             ),
-            const Divider(height: 24),
+            const Divider(height: AppSpacing.gutter),
 
             // Distância de Ida
             _buildRow(
               context: context,
               icon: Icons.east,
-              iconColor: const Color(0xFFFFB5A0),
+              iconColor: theme.colorScheme.primary,
               label: 'Distância de Ida:',
               value: AppFormatters.formatDistance(calc.outboundDistanceKm),
             ),
 
             // Distância de Volta (se aplicável)
             if (calc.isRoundTrip && calc.returnDistanceKm != null) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.stackSm),
               _buildRow(
                 context: context,
                 icon: Icons.west,
-                iconColor: const Color(0xFFC9C6C5),
+                iconColor: theme.colorScheme.tertiary,
                 label: 'Distância de Volta (RN05):',
                 value: AppFormatters.formatDistance(calc.returnDistanceKm!),
               ),
             ],
 
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.stackSm),
             // Distância Total
             _buildRow(
               context: context,
               icon: Icons.alt_route,
-              iconColor: const Color(0xFFFF5625),
+              iconColor: theme.colorScheme.primaryContainer,
               label: 'Distância Total:',
               value: AppFormatters.formatDistance(calc.totalDistanceKm),
               isBold: true,
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.stackSm),
             // Litros Estimados
             _buildRow(
               context: context,
               icon: Icons.local_gas_station_outlined,
-              iconColor: const Color(0xFFC9C6C5),
+              iconColor: theme.colorScheme.tertiary,
               label: 'Combustível Estimado:',
               value: AppFormatters.formatLitres(calc.litresNeeded),
             ),
 
-            const Divider(height: 24),
+            const Divider(height: AppSpacing.gutter),
 
             // Custo Total Estimado
             Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Color(0xFF1C1B1B),
+              padding: const EdgeInsets.all(AppSpacing.stackMd),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerLow,
                 border: Border.fromBorderSide(
-                  BorderSide(color: Color(0xFFFF5625), width: 1.5),
+                  BorderSide(
+                    color: theme.colorScheme.primaryContainer,
+                    width: 1.5,
+                  ),
                 ),
               ),
               child: Row(
@@ -105,14 +109,14 @@ class ResultCard extends StatelessWidget {
                     'Custo Estimado:',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFFFFB5A0),
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   Text(
                     AppFormatters.formatCurrency(calc.estimatedCost),
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFFFF4500),
+                      color: AppColors.heatOrange,
                     ),
                   ),
                 ],
@@ -137,12 +141,12 @@ class ResultCard extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 20, color: iconColor),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.stackSm),
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            color: const Color(0xFFE5E2E1),
+            color: theme.colorScheme.onSurface,
           ),
         ),
         const Spacer(),
@@ -150,7 +154,7 @@ class ResultCard extends StatelessWidget {
           value,
           style: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: isBold ? const Color(0xFFFF4500) : const Color(0xFFE5E2E1),
+            color: isBold ? AppColors.heatOrange : theme.colorScheme.onSurface,
           ),
         ),
       ],

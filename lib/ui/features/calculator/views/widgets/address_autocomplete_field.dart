@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fuel_calculator/domain/models/location_point.dart';
+import 'package:fuel_calculator/ui/core/theme.dart';
 import 'package:fuel_calculator/ui/core/utils/debouncer.dart';
 
 class AddressAutocompleteField extends StatefulWidget {
@@ -126,35 +127,37 @@ class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
             widget.controller.text = option.addressName;
             widget.onChanged(option.addressName);
           },
-          fieldViewBuilder:
-              (context, controller, focusNode, onFieldSubmitted) {
+          fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
             return TextField(
               controller: controller,
               focusNode: focusNode,
               decoration: InputDecoration(
                 labelText: widget.labelText,
                 hintText: widget.hintText,
-                prefixIcon: Icon(widget.prefixIcon, color: widget.prefixIconColor),
+                prefixIcon: Icon(
+                  widget.prefixIcon,
+                  color: widget.prefixIconColor,
+                ),
                 suffixIcon: _isLoading
                     ? const Padding(
-                        padding: EdgeInsets.all(12.0),
+                        padding: EdgeInsets.all(
+                          AppSpacing.stackSm + AppSpacing.unit,
+                        ),
                         child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                          width: AppSpacing.stackMd,
+                          height: AppSpacing.stackMd,
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         ),
                       )
                     : (controller.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear, size: 18),
-                            onPressed: () {
-                              controller.clear();
-                              widget.onChanged('');
-                            },
-                          )
-                        : null),
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, size: 18),
+                              onPressed: () {
+                                controller.clear();
+                                widget.onChanged('');
+                              },
+                            )
+                          : null),
               ),
               onChanged: widget.onChanged,
               onTap: widget.onTap,
@@ -167,8 +170,11 @@ class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
               child: Material(
                 elevation: 4.0,
                 color: theme.colorScheme.surfaceContainerHigh,
-                shape: const RoundedRectangleBorder(
-                  side: BorderSide(color: Color(0xFF5D4038), width: 1),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: theme.colorScheme.outlineVariant,
+                    width: 1,
+                  ),
                 ),
                 child: SizedBox(
                   width: constraints.maxWidth,

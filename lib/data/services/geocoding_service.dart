@@ -6,7 +6,7 @@ class GeocodingService {
   final http.Client _httpClient;
 
   GeocodingService({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client();
+    : _httpClient = httpClient ?? http.Client();
 
   Future<LocationPoint> searchAddress(String query) async {
     final trimmedQuery = query.trim();
