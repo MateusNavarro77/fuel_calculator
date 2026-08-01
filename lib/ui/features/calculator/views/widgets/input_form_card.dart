@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fuel_calculator/data/services/geocoding_service.dart';
 import 'package:fuel_calculator/ui/core/theme.dart';
 import '../../view_models/calculator_view_model.dart';
 import 'package:fuel_calculator/ui/features/autocomplete_address/views/widgets/address_autocomplete_field.dart';
@@ -7,14 +6,12 @@ import 'package:fuel_calculator/ui/features/autocomplete_address/views/widgets/a
 class InputFormCard extends StatefulWidget {
   final CalculatorViewModel viewModel;
   final VoidCallback? onTextFieldFocus;
-  final GeocodingService _geocodingService;
 
-  InputFormCard({
+  const InputFormCard({
     super.key,
     required this.viewModel,
     this.onTextFieldFocus,
-    GeocodingService? geocodingService,
-  }) : _geocodingService = geocodingService ?? GeocodingService();
+  });
 
   @override
   State<InputFormCard> createState() => _InputFormCardState();
@@ -127,8 +124,6 @@ class _InputFormCardState extends State<InputFormCard> {
               hintText: 'Ex: Av. Paulista, 1000, São Paulo',
               prefixIcon: Icons.my_location,
               prefixIconColor: theme.colorScheme.primary,
-              fetchSuggestions:
-                  widget._geocodingService.fetchAddressSuggestions,
               onChanged: widget.viewModel.setOriginText,
               onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
@@ -143,11 +138,10 @@ class _InputFormCardState extends State<InputFormCard> {
               hintText: 'Ex: Parque do Ibirapuera, São Paulo',
               prefixIcon: Icons.location_on,
               prefixIconColor: theme.colorScheme.primaryContainer,
-              fetchSuggestions:
-                  widget._geocodingService.fetchAddressSuggestions,
               onChanged: widget.viewModel.setDestinationText,
               onTap: widget.onTextFieldFocus,
               textInputAction: TextInputAction.next,
+              
             ),
             const SizedBox(height: AppSpacing.stackMd),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_calculator/domain/models/location_point.dart';
+import 'package:fuel_calculator/domain/repositories/geocoding_repository.dart';
 import 'package:fuel_calculator/ui/core/theme.dart';
 import 'package:fuel_calculator/ui/features/autocomplete_address/view_models/address_autocomplete_view_model.dart';
 
@@ -11,8 +12,11 @@ class AddressAutocompleteField extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final AddressAutocompleteViewModel? viewModel;
+  final GeocodingRepository? geocodingRepository;
   final Future<List<LocationPoint>> Function(String query)? fetchSuggestions;
   final ValueChanged<String> onChanged;
+  final ValueChanged<LocationPoint>? onSelected;
+  final ValueChanged<List<LocationPoint>>? onQueryResult;
   final VoidCallback? onTap;
   final TextInputAction? textInputAction;
   final Duration debounceDuration;
@@ -26,15 +30,15 @@ class AddressAutocompleteField extends StatefulWidget {
     required this.controller,
     required this.focusNode,
     this.viewModel,
+    this.geocodingRepository,
     this.fetchSuggestions,
     required this.onChanged,
+    this.onSelected,
+    this.onQueryResult,
     this.onTap,
     this.textInputAction,
     this.debounceDuration = const Duration(milliseconds: 400),
-  }) : assert(
-         viewModel != null || fetchSuggestions != null,
-         'Either viewModel or fetchSuggestions must be provided.',
-       );
+  });
 
   @override
   State<AddressAutocompleteField> createState() =>
@@ -53,15 +57,22 @@ class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
       _ownsViewModel = false;
     } else {
       _viewModel = AddressAutocompleteViewModel(
-        fetchSuggestions: widget.fetchSuggestions!,
+        repository: widget.geocodingRepository,
+        fetchSuggestions: widget.fetchSuggestions,
         debounceDuration: widget.debounceDuration,
       );
       _ownsViewModel = true;
     }
+    _viewModel.addListener(_onViewModelChanged);
+  }
+
+  void _onViewModelChanged() {
+    widget.onQueryResult?.call(_viewModel.suggestions);
   }
 
   @override
   void dispose() {
+    _viewModel.removeListener(_onViewModelChanged);
     if (_ownsViewModel) {
       _viewModel.dispose();
     }
@@ -88,6 +99,7 @@ class _AddressAutocompleteFieldState extends State<AddressAutocompleteField> {
               onSelected: (LocationPoint option) {
                 widget.controller.text = option.addressName;
                 widget.onChanged(option.addressName);
+                widget.onSelected?.call(option);
               },
               fieldViewBuilder:
                   (context, controller, focusNode, onFieldSubmitted) {
