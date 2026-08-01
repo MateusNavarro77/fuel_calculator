@@ -16,7 +16,9 @@ class FuelCalculatorApp extends StatelessWidget {
     return MaterialApp(
       title: 'Calculadora de Combustível',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.darkTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
       home: CalculatorScreen(enableTileLayer: enableTileLayer),
     );
   }

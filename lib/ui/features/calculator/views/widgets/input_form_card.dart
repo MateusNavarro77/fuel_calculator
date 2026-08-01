@@ -98,13 +98,16 @@ class _InputFormCardState extends State<InputFormCard> {
           children: [
             Row(
               children: [
-                Icon(Icons.directions_car, color: theme.colorScheme.primary),
+                Container(
+                  width: 8,
+                  height: 8,
+                  color: const Color(0xFFFF4500),
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Dados da Viagem',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
                   ),
                 ),
               ],
@@ -118,7 +121,7 @@ class _InputFormCardState extends State<InputFormCard> {
               decoration: const InputDecoration(
                 labelText: 'Endereço de Origem',
                 hintText: 'Ex: Av. Paulista, 1000, São Paulo',
-                prefixIcon: Icon(Icons.my_location, color: Colors.green),
+                prefixIcon: Icon(Icons.my_location, color: Color(0xFFFFB5A0)),
               ),
               onChanged: widget.viewModel.setOriginText,
               onTap: widget.onTextFieldFocus,
@@ -133,7 +136,7 @@ class _InputFormCardState extends State<InputFormCard> {
               decoration: const InputDecoration(
                 labelText: 'Endereço de Destino',
                 hintText: 'Ex: Parque do Ibirapuera, São Paulo',
-                prefixIcon: Icon(Icons.location_on, color: Colors.red),
+                prefixIcon: Icon(Icons.location_on, color: Color(0xFFFF5625)),
               ),
               onChanged: widget.viewModel.setDestinationText,
               onTap: widget.onTextFieldFocus,
@@ -154,7 +157,7 @@ class _InputFormCardState extends State<InputFormCard> {
                     decoration: const InputDecoration(
                       labelText: 'Consumo (km/L)',
                       hintText: 'Ex: 12.5',
-                      prefixIcon: Icon(Icons.speed),
+                      prefixIcon: Icon(Icons.speed, color: Color(0xFFC6C6C7)),
                     ),
                     onChanged: widget.viewModel.setConsumptionText,
                     onTap: widget.onTextFieldFocus,
@@ -174,7 +177,7 @@ class _InputFormCardState extends State<InputFormCard> {
                     decoration: const InputDecoration(
                       labelText: 'Preço (R\$/L)',
                       hintText: 'Ex: 6.39',
-                      prefixIcon: Icon(Icons.local_gas_station),
+                      prefixIcon: Icon(Icons.local_gas_station, color: Color(0xFFC6C6C7)),
                     ),
                     onChanged: widget.viewModel.setPriceText,
                     onTap: widget.onTextFieldFocus,
@@ -188,27 +191,27 @@ class _InputFormCardState extends State<InputFormCard> {
 
             // Switch Ida e Volta (RF05)
             Material(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              //   shape: RoundedRectangleBorder(
-              //  //   borderRadius: BorderRadius.circular(12),
-              //     side: const BorderSide(color: Color(0xFFE2E8F0)),
-              //   ),
+              color: theme.colorScheme.surfaceContainerLow,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+                side: BorderSide(color: Color(0xFF5D4038)),
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text(
+                  title: Text(
                     'Calcular Ida e Volta',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Calcula rota de retorno separadamente (RN05)',
-                    style: TextStyle(fontSize: 12),
+                    style: theme.textTheme.bodySmall,
                   ),
                   value: widget.viewModel.isRoundTrip,
                   onChanged: widget.viewModel.setIsRoundTrip,
-                  activeTrackColor: theme.colorScheme.primary,
                 ),
               ),
             ),
@@ -218,19 +221,22 @@ class _InputFormCardState extends State<InputFormCard> {
             if (widget.viewModel.errorMessage != null) ...[
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.red.shade200),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF93000A),
+                  border: Border.fromBorderSide(
+                    BorderSide(color: Color(0xFFFFB4AB)),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.error_outline, color: Colors.red),
+                    const Icon(Icons.error_outline, color: Color(0xFFFFDAD6)),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         widget.viewModel.errorMessage!,
-                        style: const TextStyle(color: Colors.red, fontSize: 13),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFFFFDAD6),
+                        ),
                       ),
                     ),
                   ],
@@ -250,15 +256,15 @@ class _InputFormCardState extends State<InputFormCard> {
                       width: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     )
                   : const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.calculate),
+                        Icon(Icons.calculate, color: Colors.black),
                         SizedBox(width: 8),
-                        Text('Calcular Custo da Viagem'),
+                        Text('CALCULAR CUSTO DA VIAGEM'),
                       ],
                     ),
             ),
